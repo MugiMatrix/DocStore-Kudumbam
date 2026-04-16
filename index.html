@@ -3,873 +3,228 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Team Avatar Showdown</title>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<title>Team Avatar Keyboard Battle</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 :root{
   --bg:#0a0a12;--s1:#12111f;--s2:#1c1b2e;--s3:#26243d;
-  --acc:#ff5f40;--acc2:#ff9a6c;
-  --pur:#a855f7;--pink:#ec4899;--teal:#2dd4bf;
-  --yel:#fbbf24;--grn:#4ade80;
-  --txt:#f0eeff;--mut:#7c7a9a;
-  --bd:rgba(255,255,255,0.07);
+  --txt:#f0eeff;--mut:#7c7a9a;--bd:rgba(255,255,255,0.07);
   --r:14px;
+  --c1:#a855f7;--c2:#f43f5e;--c3:#22d3ee;--c4:#4ade80;
+  --c1d:#7c22c4;--c2d:#be123c;--c3d:#0891b2;--c4d:#16a34a;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden;}
-.comic{font-family:'Bangers',cursive;letter-spacing:1.5px;}
-
-/* BG GRID */
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
-
-/* SCREENS */
-.screen{display:none;min-height:100vh;position:relative;z-index:1;}
-.screen.active{display:flex;flex-direction:column;}
-.container{max-width:740px;margin:0 auto;padding:20px 16px;width:100%;}
-
-/* NAV */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--bd);background:rgba(10,10,18,0.8);backdrop-filter:blur(12px);position:sticky;top:0;z-index:50;}
-.topbar-logo{font-family:'Bangers',cursive;font-size:22px;color:var(--acc);letter-spacing:2px;}
-.topbar-right{display:flex;align-items:center;gap:10px;}
-
-/* BUTTONS */
-.btn{padding:11px 26px;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
-.btn-acc{background:var(--acc);color:#fff;box-shadow:0 4px 0 #b83a22;}
+html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.screen{display:none;height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:16px;position:relative;z-index:1;}
+.screen.active{display:flex;}
+.home-title{font-family:'Bangers',cursive;font-size:clamp(40px,8vw,80px);color:#ff5f40;text-shadow:4px 4px 0 #ec4899,8px 8px 0 rgba(0,0,0,.4);text-align:center;line-height:1;}
+.home-sub{color:var(--mut);font-size:15px;margin:12px 0 32px;text-align:center;max-width:420px;line-height:1.6;}
+.btn{padding:12px 32px;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:all .15s;}
+.btn-acc{background:#ff5f40;color:#fff;box-shadow:0 4px 0 #b83a22;}
 .btn-acc:hover{transform:translateY(-2px);box-shadow:0 6px 0 #b83a22;}
-.btn-acc:active{transform:translateY(2px);box-shadow:0 2px 0 #b83a22;}
-.btn-pur{background:var(--pur);color:#fff;box-shadow:0 4px 0 #7c22c4;}
-.btn-pur:hover{transform:translateY(-2px);box-shadow:0 6px 0 #7c22c4;}
 .btn-ghost{background:var(--s2);color:var(--txt);border:1.5px solid var(--bd);}
-.btn-ghost:hover{background:var(--s3);border-color:rgba(255,255,255,0.15);}
-.btn-sm{padding:7px 16px;font-size:12px;}
-.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
-
-/* CARDS */
-.card{background:var(--s1);border:1.5px solid var(--bd);border-radius:var(--r);}
-
-/* HOME SCREEN */
-#s-home{align-items:center;justify-content:center;text-align:center;padding:40px 20px;}
-.home-glow{position:fixed;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.18) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
-.home-emoji{font-size:72px;display:block;margin-bottom:16px;animation:floaty 3s ease-in-out infinite;}
-@keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(3deg);}}
-.home-title{font-family:'Bangers',cursive;font-size:clamp(48px,10vw,80px);line-height:.95;color:var(--acc);text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.4);margin-bottom:12px;}
-.home-sub{color:var(--mut);font-size:15px;max-width:380px;margin:0 auto 36px;line-height:1.6;}
-.flow{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:36px;flex-wrap:wrap;}
-.flow-step{background:var(--s2);border:1.5px solid var(--bd);border-radius:12px;padding:14px 16px;text-align:center;min-width:110px;}
-.flow-n{font-family:'Bangers',cursive;font-size:30px;color:var(--acc);}
-.flow-lbl{font-size:11px;color:var(--mut);margin-top:2px;line-height:1.3;}
-.flow-arrow{color:var(--mut);font-size:18px;}
-
-/* SETUP SCREEN */
-.setup-header{padding:24px 0 16px;text-align:center;}
-.setup-header h2{font-family:'Bangers',cursive;font-size:36px;color:var(--acc);}
-.setup-header p{color:var(--mut);font-size:13px;margin-top:4px;}
-.tm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 16px;}
-@media(max-width:480px){.tm-grid{grid-template-columns:1fr;}}
-.tm-card{padding:14px;display:flex;align-items:center;gap:12px;cursor:default;}
-.av{border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.av56{width:56px;height:56px;font-size:26px;}
-.av80{width:80px;height:80px;font-size:38px;}
-.av44{width:44px;height:44px;font-size:20px;}
-.tm-info{flex:1;min-width:0;}
-.tm-name{font-weight:800;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.tm-role{font-size:11px;color:var(--mut);margin-top:2px;}
-.tm-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px;display:inline-block;}
-.tm-acts{display:flex;gap:5px;margin-left:auto;}
-.ic-btn{width:28px;height:28px;border-radius:7px;border:1.5px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:12px;transition:all .15s;}
-.ic-btn:hover{background:var(--s3);color:var(--txt);}
-.add-tile{border:1.5px dashed rgba(255,255,255,0.12);border-radius:var(--r);padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:var(--mut);font-size:13px;font-weight:700;transition:all .15s;background:transparent;}
-.add-tile:hover{border-color:var(--acc);color:var(--acc);background:rgba(255,95,64,.05);}
-.setup-footer{display:flex;gap:10px;justify-content:center;padding:8px 0 24px;}
-.tm-count{text-align:center;font-size:13px;color:var(--mut);margin-bottom:12px;}
-.tm-count span{color:var(--acc);font-weight:800;}
-
-/* MODAL */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);}
-.modal{background:var(--s1);border:1.5px solid rgba(255,255,255,.1);border-radius:20px;padding:24px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;}
-.modal-title{font-family:'Bangers',cursive;font-size:28px;margin-bottom:18px;color:var(--acc);}
-.fg{margin-bottom:14px;}
-.fg label{display:block;font-size:11px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
-.fg input,.fg textarea,.fg select{width:100%;background:var(--s2);border:1.5px solid var(--bd);border-radius:10px;padding:10px 13px;color:var(--txt);font-family:'Nunito',sans-serif;font-size:14px;outline:none;transition:border-color .15s;}
-.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--acc);}
-.fg textarea{height:68px;resize:none;}
-.fg select option{background:var(--s2);}
-.emoji-row{display:flex;flex-wrap:wrap;gap:8px;}
-.e-opt{width:40px;height:40px;border-radius:10px;background:var(--s2);border:2px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all .15s;}
-.e-opt:hover{border-color:rgba(255,255,255,.2);}
-.e-opt.sel{border-color:var(--acc);background:rgba(255,95,64,.15);}
-.anime-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.a-opt{background:var(--s2);border:2px solid transparent;border-radius:10px;padding:10px 8px;cursor:pointer;text-align:center;transition:all .15s;}
-.a-opt:hover{border-color:rgba(255,255,255,.15);}
-.a-opt.sel{border-color:var(--pur);}
-.a-opt .ai{font-size:20px;margin-bottom:4px;}
-.a-opt .an{font-size:11px;font-weight:800;}
-.a-opt .ad{font-size:10px;color:var(--mut);margin-top:2px;line-height:1.2;}
-.modal-btns{display:flex;gap:8px;margin-top:20px;}
-.modal-btns .btn{flex:1;justify-content:center;}
-
-/* PERSONALITY MATCH */
-.pm-prog{display:flex;gap:5px;justify-content:center;margin:8px 0 20px;}
-.pm-dot{width:10px;height:10px;border-radius:50%;background:var(--s3);border:1.5px solid var(--bd);transition:all .3s;}
-.pm-dot.curr{background:var(--acc);box-shadow:0 0 8px var(--acc);}
-.pm-dot.hit{background:var(--grn);}
-.pm-dot.miss{background:#f87171;}
-.mystery-card{padding:28px 20px;text-align:center;margin-bottom:20px;}
-.mystery-av{width:90px;height:90px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:44px;background:var(--s3);border:3px solid var(--bd);position:relative;}
-.mystery-av::after{content:'?';font-family:'Bangers',cursive;font-size:28px;color:var(--mut);position:absolute;bottom:-8px;right:-8px;background:var(--s2);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bd);}
-.pm-q{font-family:'Bangers',cursive;font-size:26px;color:var(--txt);margin-bottom:8px;}
-.trait-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0;}
-.trait{background:var(--s3);border:1.5px solid var(--bd);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--acc2);}
-.pm-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-@media(max-width:440px){.pm-opts{grid-template-columns:1fr;}}
-.pm-opt{background:var(--s1);border:2px solid var(--bd);border-radius:12px;padding:13px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .15s;font-weight:700;font-size:14px;}
-.pm-opt:hover{border-color:rgba(255,255,255,.25);background:var(--s2);}
-.pm-opt.ok{border-color:var(--grn)!important;background:rgba(74,222,128,.1)!important;pointer-events:none;}
-.pm-opt.no{border-color:#f87171!important;background:rgba(248,113,113,.1)!important;pointer-events:none;}
-.pm-opt.show{border-color:var(--grn)!important;background:rgba(74,222,128,.08)!important;pointer-events:none;}
-.feedback-banner{border-radius:12px;padding:12px 16px;margin:14px 0;font-size:14px;font-weight:700;text-align:center;display:none;}
-.feedback-banner.show{display:block;}
-.fb-hit{background:rgba(74,222,128,.15);color:var(--grn);border:1.5px solid rgba(74,222,128,.3);}
-.fb-miss{background:rgba(248,113,113,.15);color:#f87171;border:1.5px solid rgba(248,113,113,.3);}
-.pm-footer{display:flex;justify-content:center;padding:12px 0 24px;}
-
-/* TRANSITION / LEADERBOARD */
-#s-trans{align-items:center;justify-content:center;text-align:center;padding:40px 20px;}
-.trans-emoji{font-size:70px;animation:pop .4s ease;}
-@keyframes pop{0%{transform:scale(0);}80%{transform:scale(1.1);}100%{transform:scale(1);}}
-.trans-title{font-family:'Bangers',cursive;font-size:48px;color:var(--acc);text-shadow:3px 3px 0 var(--pink);margin:12px 0 8px;}
-.trans-sub{color:var(--mut);font-size:14px;margin-bottom:28px;}
-.lb{list-style:none;max-width:400px;width:100%;margin:0 auto 28px;}
-.lb-item{display:flex;align-items:center;gap:12px;padding:12px 16px;margin-bottom:8px;border-radius:12px;background:var(--s1);border:1.5px solid var(--bd);}
-.lb-rank{font-family:'Bangers',cursive;font-size:26px;width:34px;}
-.r1{color:var(--yel);}
-.r2{color:#cbd5e1;}
-.r3{color:#b45309;}
-.lb-pts{margin-left:auto;font-weight:800;color:var(--acc);font-size:15px;}
-
-/* BATTLE */
-.bat-header{text-align:center;padding:16px 0 8px;}
-.bat-title{font-family:'Bangers',cursive;font-size:36px;color:var(--acc);text-shadow:3px 3px 0 var(--pink);}
-.bat-sub{color:var(--mut);font-size:13px;}
-.round-badge{display:inline-block;padding:4px 14px;background:var(--s3);border:1.5px solid var(--bd);border-radius:20px;font-size:12px;font-weight:700;color:var(--yel);margin:8px 0;}
-.arena{display:flex;align-items:stretch;gap:12px;margin:16px 0;}
-.fighter{flex:1;padding:20px 16px;text-align:center;border-radius:16px;background:var(--s1);border:2px solid var(--bd);display:flex;flex-direction:column;align-items:center;gap:8px;}
-.f-left{border-color:rgba(168,85,247,.5);}
-.f-right{border-color:rgba(236,72,153,.5);}
-.f-name{font-family:'Bangers',cursive;font-size:22px;}
-.f-role{font-size:11px;color:var(--mut);}
-.vs-pill{display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.vs-txt{font-family:'Bangers',cursive;font-size:34px;color:var(--acc);text-shadow:2px 2px 0 var(--pink);}
-.roast-area{border-radius:14px;padding:20px;margin:4px 0;background:var(--s2);border:1.5px solid var(--bd);}
-.roast-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);margin-bottom:10px;}
-.roast-txt{font-size:14px;line-height:1.7;color:var(--acc2);white-space:pre-wrap;}
-.typing{display:flex;gap:4px;align-items:center;padding:4px 0;}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--mut);animation:blink 1.2s ease infinite;}
-.dot:nth-child(2){animation-delay:.2s;}
-.dot:nth-child(3){animation-delay:.4s;}
-@keyframes blink{0%,100%{opacity:.2;}50%{opacity:1;}}
-.vote-row{display:flex;gap:10px;margin:14px 0;}
-.vote-btn{flex:1;padding:14px;border:2px solid;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;transition:all .15s;background:transparent;}
-.vb-l{border-color:var(--pur);color:var(--pur);}
-.vb-l:hover{background:rgba(168,85,247,.15);}
-.vb-r{border-color:var(--pink);color:var(--pink);}
-.vb-r:hover{background:rgba(236,72,153,.15);}
-.vote-btn:disabled{opacity:.3;cursor:not-allowed;}
-.results-area{margin:12px 0;}
-.res-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.res-name{font-size:13px;font-weight:700;width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.res-bar{flex:1;height:26px;background:var(--s3);border-radius:8px;overflow:hidden;}
-.res-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding-left:10px;font-size:12px;font-weight:800;color:#fff;transition:width .6s ease;}
-.fl{background:var(--pur);}
-.fr{background:var(--pink);}
-.res-pct{font-size:12px;font-weight:700;width:36px;text-align:right;color:var(--mut);}
-.winner-banner{text-align:center;padding:16px;background:rgba(250,191,36,.1);border:1.5px solid rgba(250,191,36,.3);border-radius:12px;margin:12px 0;}
-.winner-banner p{font-family:'Bangers',cursive;font-size:22px;color:var(--yel);}
-.bat-footer{display:flex;justify-content:center;gap:10px;padding:8px 0 24px;}
-
-/* CHAMPION */
-#s-champ{align-items:center;justify-content:center;text-align:center;padding:40px 20px;}
-.champ-bg{position:fixed;inset:0;pointer-events:none;z-0;}
-.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;}
-@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
-.crown{font-size:72px;animation:floaty 2s ease-in-out infinite;display:block;margin-bottom:12px;}
-.champ-title{font-family:'Bangers',cursive;font-size:56px;color:var(--yel);text-shadow:4px 4px 0 #b45309;line-height:1;}
-.champ-name{font-family:'Bangers',cursive;font-size:clamp(36px,8vw,64px);color:var(--acc);text-shadow:3px 3px 0 var(--pink);margin:8px 0;}
-.champ-role{color:var(--mut);font-size:14px;margin-bottom:28px;}
-.champ-footer{display:flex;gap:10px;justify-content:center;}
-
-/* UTILITIES */
-.hidden{display:none!important;}
-.text-center{text-align:center;}
-.mt8{margin-top:8px;}
-.mt16{margin-top:16px;}
-.gap10{gap:10px;}
-.flex{display:flex;}
-.flex-center{display:flex;align-items:center;justify-content:center;}
+.btn-ghost:hover{background:var(--s3);}
+.btn-sm{padding:8px 20px;font-size:13px;}
+.setup-title{font-family:'Bangers',cursive;font-size:36px;color:#ff5f40;text-align:center;margin-bottom:6px;}
+.setup-sub{color:var(--mut);font-size:13px;text-align:center;margin-bottom:24px;}
+.players-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:640px;margin-bottom:20px;}
+@media(max-width:500px){.players-grid{grid-template-columns:1fr;}}
+.player-setup{border-radius:14px;padding:16px;border:2px solid;}
+.p1-card{background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.3);}
+.p2-card{background:rgba(244,63,94,.08);border-color:rgba(244,63,94,.3);}
+.p3-card{background:rgba(34,211,238,.08);border-color:rgba(34,211,238,.3);}
+.p4-card{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.3);}
+.ps-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.ps-key{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bangers',cursive;font-size:20px;flex-shrink:0;}
+.p1k{background:rgba(168,85,247,.3);color:var(--c1);}
+.p2k{background:rgba(244,63,94,.3);color:var(--c2);}
+.p3k{background:rgba(34,211,238,.3);color:var(--c3);}
+.p4k{background:rgba(74,222,128,.3);color:var(--c4);}
+.ps-label{font-weight:800;font-size:14px;}
+.ps-input{width:100%;background:rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;color:var(--txt);font-family:'Nunito',sans-serif;font-size:13px;outline:none;margin-bottom:8px;}
+.ps-input:focus{border-color:rgba(255,255,255,.3);}
+.emoji-mini{display:flex;flex-wrap:wrap;gap:5px;}
+.em{width:30px;height:30px;border-radius:7px;background:rgba(255,255,255,.05);border:1.5px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .12s;}
+.em:hover{border-color:rgba(255,255,255,.2);}
+.em.sel{border-color:currentColor;background:rgba(255,255,255,.1);}
+.setup-footer{display:flex;gap:10px;}
+.countdown-num{font-family:'Bangers',cursive;font-size:clamp(100px,20vw,180px);color:#ff5f40;text-shadow:6px 6px 0 #ec4899;animation:pulse .5s ease-in-out infinite alternate;line-height:1;}
+@keyframes pulse{from{transform:scale(1);}to{transform:scale(1.08);}}
+.countdown-label{font-family:'Bangers',cursive;font-size:24px;color:var(--mut);margin-top:8px;}
+#s-battle{padding:10px;justify-content:flex-start;}
+.battle-top{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:900px;padding:8px 0 12px;}
+.battle-title{font-family:'Bangers',cursive;font-size:28px;color:#ff5f40;}
+.timer-box{font-family:'Bangers',cursive;font-size:36px;padding:4px 20px;border-radius:50px;border:2px solid rgba(255,95,64,.4);color:#ff5f40;min-width:80px;text-align:center;}
+.timer-box.danger{color:#f87171;border-color:rgba(248,113,113,.6);animation:shake .1s ease infinite;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-2px);}75%{transform:translateX(2px);}}
+.fighters{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;max-width:900px;flex:1;}
+@media(max-width:600px){.fighters{grid-template-columns:repeat(2,1fr);}}
+.fighter-card{border-radius:16px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;border:2px solid;position:relative;transition:transform .1s;cursor:default;user-select:none;}
+.fc1{background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.4);}
+.fc2{background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.4);}
+.fc3{background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.4);}
+.fc4{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.4);}
+.fighter-card.eliminated{opacity:.3;filter:grayscale(1);}
+.fighter-card.hit{transform:scale(1.06);}
+.av{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid;}
+.av1{background:rgba(168,85,247,.2);border-color:var(--c1);}
+.av2{background:rgba(244,63,94,.2);border-color:var(--c2);}
+.av3{background:rgba(34,211,238,.2);border-color:var(--c3);}
+.av4{background:rgba(74,222,128,.2);border-color:var(--c4);}
+.f-name{font-weight:800;font-size:14px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;}
+.key-badge{font-family:'Bangers',cursive;font-size:22px;padding:3px 14px;border-radius:8px;letter-spacing:1px;}
+.kb1{background:rgba(168,85,247,.25);color:var(--c1);}
+.kb2{background:rgba(244,63,94,.25);color:var(--c2);}
+.kb3{background:rgba(34,211,238,.25);color:var(--c3);}
+.kb4{background:rgba(74,222,128,.25);color:var(--c4);}
+.hp-wrap{width:100%;background:rgba(0,0,0,.4);border-radius:20px;height:10px;overflow:hidden;}
+.hp-bar{height:100%;border-radius:20px;transition:width .2s ease;}
+.hp1{background:var(--c1);}
+.hp2{background:var(--c2);}
+.hp3{background:var(--c3);}
+.hp4{background:var(--c4);}
+.hp-txt{font-size:11px;font-weight:700;color:var(--mut);}
+.mash-count{font-family:'Bangers',cursive;font-size:32px;}
+.mc1{color:var(--c1);}
+.mc2{color:var(--c2);}
+.mc3{color:var(--c3);}
+.mc4{color:var(--c4);}
+.hit-fx{position:absolute;top:8px;right:8px;font-family:'Bangers',cursive;font-size:18px;opacity:0;animation:hitpop .4s ease forwards;}
+@keyframes hitpop{0%{opacity:1;transform:scale(1) translateY(0);}100%{opacity:0;transform:scale(1.4) translateY(-16px);}}
+.battle-bottom{width:100%;max-width:900px;padding:8px 0 4px;display:flex;justify-content:center;}
+.key-hint{font-size:12px;color:var(--mut);text-align:center;}
+#s-result{text-align:center;}
+.winner-crown{font-size:72px;animation:floaty 2s ease-in-out infinite;display:block;margin-bottom:8px;}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-10px) rotate(3deg);}}
+.result-title{font-family:'Bangers',cursive;font-size:clamp(40px,8vw,72px);color:#fbbf24;text-shadow:4px 4px 0 #b45309;line-height:1;}
+.winner-av{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:50px;margin:16px auto;border:4px solid;}
+.winner-name{font-family:'Bangers',cursive;font-size:clamp(28px,5vw,48px);margin-bottom:4px;}
+.winner-stats{color:var(--mut);font-size:13px;margin-bottom:24px;}
+.result-footer{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.podium{display:flex;gap:12px;justify-content:center;margin:16px 0;flex-wrap:wrap;}
+.podium-item{background:var(--s2);border:1.5px solid var(--bd);border-radius:12px;padding:10px 16px;text-align:center;min-width:80px;}
+.pod-rank{font-family:'Bangers',cursive;font-size:22px;}
+.pod-name{font-size:12px;font-weight:700;margin-top:2px;}
+.pod-score{font-size:11px;color:var(--mut);}
+.confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;animation:fall linear forwards;pointer-events:none;}
+@keyframes fall{0%{opacity:1;transform:translateY(-10px) rotate(0);}100%{opacity:0;transform:translateY(100vh) rotate(720deg);}}
 </style>
 </head>
 <body>
-
-<!-- HOME -->
 <div id="s-home" class="screen active">
-  <div class="home-glow"></div>
-  <span class="home-emoji">⚔️</span>
-  <h1 class="home-title">TEAM AVATAR<br>SHOWDOWN</h1>
-  <p class="home-sub">Match your teammates to their anime avatars, then watch them roast each other in an epic battle royale!</p>
-  <div class="flow">
-    <div class="flow-step"><div class="flow-n">1</div><div class="flow-lbl">Organizer<br>sets up team</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step"><div class="flow-n">2</div><div class="flow-lbl">Personality<br>Match quiz</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step"><div class="flow-n">3</div><div class="flow-lbl">Avatar Roast<br>Battle finale</div></div>
-  </div>
-  <button class="btn btn-acc" onclick="goScreen('s-setup')" style="font-size:17px;padding:14px 40px;">🎮 Start Game</button>
-  <p style="color:var(--mut);font-size:12px;margin-top:16px;">Best for 6–10 players · Share screen or use as Teams tab</p>
+  <div style="font-size:60px;animation:floaty 2s ease-in-out infinite;margin-bottom:12px;">⌨️</div>
+  <h1 class="home-title">KEYBOARD<br>AH NALLA AMUKKUNGADAA</h1>
+  <p class="home-sub">Up to 4 players on one keyboard. Mash your key as fast as you can. Last avatar standing wins!</p>
+  <button class="btn btn-acc" onclick="goScreen('s-setup')" style="font-size:16px;padding:13px 40px;">🎮 Set Up Players</button>
 </div>
-
-<!-- SETUP -->
 <div id="s-setup" class="screen">
-  <nav class="topbar">
-    <span class="topbar-logo">⚔ SHOWDOWN</span>
-    <div class="topbar-right">
-      <button class="btn btn-ghost btn-sm" onclick="goScreen('s-home')">← Back</button>
-    </div>
-  </nav>
-  <div class="container">
-    <div class="setup-header">
-      <h2>Build Your Roster</h2>
-      <p>Add 4–10 teammates. The organizer fills this in before the game.</p>
-    </div>
-    <div class="tm-count">You have <span id="tm-count">0</span> teammates added <span id="min-warn" style="color:#f87171;display:none;">(need at least 4)</span></div>
-    <div class="tm-grid" id="tm-grid"></div>
-    <div class="add-tile" onclick="openModal()">
-      <span style="font-size:22px;">＋</span> Add Teammate
-    </div>
-    <div class="setup-footer">
-      <button class="btn btn-acc" id="start-game-btn" onclick="startGame()" disabled>🚀 Start Game</button>
-    </div>
-    <div style="background:var(--s2);border:1.5px solid var(--bd);border-radius:12px;padding:16px;margin-top:8px;margin-bottom:24px;">
-      <p style="font-size:12px;color:var(--mut);line-height:1.7;"><strong style="color:var(--acc2);">💡 Teams Tab tip:</strong> Host this HTML file on <a href="https://pages.github.com" style="color:var(--teal);" target="_blank">GitHub Pages</a> or <a href="https://vercel.com" style="color:var(--teal);" target="_blank">Vercel</a> (both free). Then in Teams, click <strong>+</strong> in any channel → <strong>Website</strong> → paste the URL. Everyone on the team sees the same game live!</p>
-    </div>
+  <div class="setup-title">AALUNGA PER SOLLUNGA BHAA</div>
+  <div class="setup-sub">Enter names & pick avatars. Keys are pre-assigned — just start mashing!</div>
+  <div class="players-grid" id="players-grid"></div>
+  <div class="setup-footer">
+    <button class="btn btn-ghost btn-sm" onclick="goScreen('s-home')">← Back</button>
+    <button class="btn btn-acc" onclick="startCountdown()">⚔️ Fight!</button>
   </div>
 </div>
-
-<!-- PERSONALITY MATCH -->
-<div id="s-pm" class="screen">
-  <nav class="topbar">
-    <span class="topbar-logo">🎯 MATCH</span>
-    <div class="topbar-right">
-      <span id="pm-score-display" style="font-weight:800;color:var(--acc);font-size:14px;"></span>
-    </div>
-  </nav>
-  <div class="container">
-    <div class="pm-prog" id="pm-prog"></div>
-    <div class="mystery-card card">
-      <div class="mystery-av" id="pm-avatar"></div>
-      <div class="pm-q">Who does this avatar belong to?</div>
-      <div class="trait-wrap" id="pm-traits"></div>
-    </div>
-    <div class="pm-opts" id="pm-opts"></div>
-    <div class="feedback-banner" id="pm-feedback"></div>
-    <div class="pm-footer">
-      <button class="btn btn-acc hidden" id="pm-next-btn" onclick="pmNext()">Next →</button>
-    </div>
-  </div>
+<div id="s-countdown" class="screen">
+  <div class="countdown-num" id="countdown-num">3</div>
+  <div class="countdown-label">AMUKKA THAYAARADAA?!</div>
 </div>
-
-<!-- TRANSITION -->
-<div id="s-trans" class="screen">
-  <span class="trans-emoji">🏆</span>
-  <div class="trans-title">Round 1 Done!</div>
-  <div class="trans-sub">Here's how everyone matched up. Get ready for the ROAST BATTLE!</div>
-  <ul class="lb" id="trans-lb"></ul>
-  <button class="btn btn-acc" style="font-size:16px;padding:13px 36px;" onclick="startBattle()">⚔️ Start Battle Royale</button>
-</div>
-
-<!-- BATTLE -->
 <div id="s-battle" class="screen">
-  <nav class="topbar">
-    <span class="topbar-logo">⚔ BATTLE</span>
-    <div class="topbar-right">
-      <span id="bat-round-label" style="font-size:13px;color:var(--yel);font-weight:700;"></span>
-    </div>
-  </nav>
-  <div class="container">
-    <div class="bat-header">
-      <div class="bat-title">ROAST BATTLE</div>
-      <div id="bat-round-badge" class="round-badge"></div>
-      <div class="bat-sub">AI generates roasts · Team votes for the winner</div>
-    </div>
-    <div class="arena">
-      <div class="fighter f-left" id="bat-f1">
-        <div class="av av80" id="bat-av1"></div>
-        <div class="f-name" id="bat-n1"></div>
-        <div class="f-role" id="bat-r1"></div>
-      </div>
-      <div class="vs-pill"><div class="vs-txt">VS</div></div>
-      <div class="fighter f-right" id="bat-f2">
-        <div class="av av80" id="bat-av2"></div>
-        <div class="f-name" id="bat-n2"></div>
-        <div class="f-role" id="bat-r2"></div>
-      </div>
-    </div>
-    <div class="roast-area">
-      <div class="roast-label">⚡ AI-Generated Roast Battle</div>
-      <div class="roast-txt" id="roast-txt"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
-    </div>
-    <div class="vote-row" id="vote-row">
-      <button class="vote-btn vb-l" id="vb1" onclick="castVote(0)"></button>
-      <button class="vote-btn vb-r" id="vb2" onclick="castVote(1)"></button>
-    </div>
-    <div class="results-area hidden" id="results-area">
-      <div class="res-row">
-        <div class="res-name" id="res-n1"></div>
-        <div class="res-bar"><div class="res-fill fl" id="res-bar1"></div></div>
-        <div class="res-pct" id="res-pct1"></div>
-      </div>
-      <div class="res-row">
-        <div class="res-name" id="res-n2"></div>
-        <div class="res-bar"><div class="res-fill fr" id="res-bar2"></div></div>
-        <div class="res-pct" id="res-pct2"></div>
-      </div>
-      <div class="winner-banner" id="winner-banner"><p id="winner-txt"></p></div>
-    </div>
-    <div class="bat-footer">
-      <button class="btn btn-acc hidden" id="bat-next-btn" onclick="nextBattle()">Next Match →</button>
-      <button class="btn btn-pur hidden" id="bat-champ-btn" onclick="showChampion()">🏆 See Champion!</button>
-    </div>
+  <div class="battle-top">
+    <div class="battle-title">⚔ PANGUU NALLA AMUKKUU!</div>
+    <div class="timer-box" id="timer-box">15</div>
+  </div>
+  <div class="fighters" id="fighters"></div>
+  <div class="battle-bottom">
+    <div class="key-hint" id="key-hint"></div>
   </div>
 </div>
-
-<!-- CHAMPION -->
-<div id="s-champ" class="screen">
-  <div class="champ-bg" id="confetti-bg"></div>
-  <span class="crown">👑</span>
-  <div class="champ-title">CHAMPION!</div>
-  <div class="av av80" id="champ-av" style="margin:16px auto;"></div>
-  <div class="champ-name" id="champ-name"></div>
-  <div class="champ-role" id="champ-role"></div>
-  <div class="champ-footer">
-    <button class="btn btn-acc" onclick="playAgain()">🔄 Play Again</button>
-    <button class="btn btn-ghost" onclick="goScreen('s-setup')">✏️ Edit Team</button>
+<div id="s-result" class="screen">
+  <span class="winner-crown">👑</span>
+  <div class="result-title">WINNER!</div>
+  <div class="winner-av" id="w-av"></div>
+  <div class="winner-name" id="w-name"></div>
+  <div class="winner-stats" id="w-stats"></div>
+  <div class="podium" id="podium"></div>
+  <div class="result-footer">
+    <button class="btn btn-acc" onclick="rematch()">🔄 Rematch Vaa Daa!</button>
+    <button class="btn btn-ghost btn-sm" onclick="goScreen('s-setup')">✏️ Change Players</button>
+    <button class="btn btn-ghost btn-sm" onclick="goScreen('s-home')">🏠 Home</button>
   </div>
 </div>
-
-<!-- MODAL -->
-<div class="overlay hidden" id="modal-overlay">
-  <div class="modal">
-    <div class="modal-title" id="modal-title">Add Teammate</div>
-    <div class="fg">
-      <label>Name</label>
-      <input type="text" id="m-name" placeholder="e.g. Priya"/>
-    </div>
-    <div class="fg">
-      <label>Role / Job title</label>
-      <input type="text" id="m-role" placeholder="e.g. Backend Engineer"/>
-    </div>
-    <div class="fg">
-      <label>Personality (the more detail, the funnier the game!)</label>
-      <textarea id="m-personality" placeholder="e.g. Always has data to back everything up, loves spreadsheets, makes dad jokes, secretly competitive"></textarea>
-    </div>
-    <div class="fg">
-      <label>Pick an emoji avatar</label>
-      <div class="emoji-row" id="emoji-row"></div>
-    </div>
-    <div class="fg">
-      <label>Anime archetype</label>
-      <div class="anime-grid" id="anime-grid"></div>
-    </div>
-    <div class="modal-btns">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-acc" onclick="saveTeammate()">Save</button>
-    </div>
-  </div>
-</div>
-
 <script>
-// ─── DATA ───────────────────────────────────────────────────────────────────
-const EMOJIS = ['🧑‍💻','👩‍💻','🦊','🐼','🐯','🦁','🐸','🌸','⚡','🔥','🌙','🎯','🚀','🎸','🧠','💎','🦋','🐉','🌊','🏔️'];
-const ANIMES = [
-  {id:'shonen',icon:'💥',name:'Shonen Hero',desc:'Bold, loud, never gives up'},
-  {id:'kuudere',icon:'❄️',name:'Kuudere',desc:'Cool outside, warm inside'},
-  {id:'tsundere',icon:'😤',name:'Tsundere',desc:'Prickly but secretly caring'},
-  {id:'genki',icon:'✨',name:'Genki',desc:'Hyper-energetic & cheerful'},
-  {id:'senpai',icon:'🎋',name:'Wise Senpai',desc:'Cryptic mentor energy'},
-  {id:'villain',icon:'😈',name:'Anti-Hero',desc:'Chaotic, sarcastic, stylish'},
+const EMOJIS=['🧑‍💻','👩‍💻','🦊','🐼','🐯','🦁','🐸','🌸','⚡','🔥','🌙','🎯','🚀','🎸','🧠','💎','🦋','🐉','🌊','👾'];
+const PDATA=[
+  {id:0,label:'P1',key:'A',keyCode:'KeyA',cls:'fc1',avcls:'av1',kbcls:'kb1',hpcls:'hp1',mccls:'mc1',color:'var(--c1)',cardcls:'p1-card',pscls:'p1k'},
+  {id:1,label:'P2',key:'L',keyCode:'KeyL',cls:'fc2',avcls:'av2',kbcls:'kb2',hpcls:'hp2',mccls:'mc2',color:'var(--c2)',cardcls:'p2-card',pscls:'p2k'},
+  {id:2,label:'P3',key:'V',keyCode:'KeyV',cls:'fc3',avcls:'av3',kbcls:'kb3',hpcls:'hp3',mccls:'mc3',color:'var(--c3)',cardcls:'p3-card',pscls:'p3k'},
+  {id:3,label:'P4',key:'B',keyCode:'KeyB',cls:'fc4',avcls:'av4',kbcls:'kb4',hpcls:'hp4',mccls:'mc4',color:'var(--c4)',cardcls:'p4-card',pscls:'p4k'},
 ];
-const AV_COLORS = [
-  {bg:'rgba(168,85,247,.25)',border:'rgba(168,85,247,.6)'},
-  {bg:'rgba(236,72,153,.25)',border:'rgba(236,72,153,.6)'},
-  {bg:'rgba(45,212,191,.25)',border:'rgba(45,212,191,.6)'},
-  {bg:'rgba(255,95,64,.25)',border:'rgba(255,95,64,.6)'},
-  {bg:'rgba(251,191,36,.25)',border:'rgba(251,191,36,.6)'},
-  {bg:'rgba(74,222,128,.25)',border:'rgba(74,222,128,.6)'},
-  {bg:'rgba(99,102,241,.25)',border:'rgba(99,102,241,.6)'},
-  {bg:'rgba(248,113,113,.25)',border:'rgba(248,113,113,.6)'},
-];
-const ANIME_SYSTEM = {
-  shonen:`You are a shonen anime hero version of this person. You are bold, passionate, loud and determined. You believe in friendship and hard work. You shout your feelings.`,
-  kuudere:`You are a kuudere anime version of this person. Stoic, calm, hyper-logical. You rarely show emotion but are secretly very warm and helpful.`,
-  tsundere:`You are a tsundere anime version of this person. You act annoyed or dismissive but are actually very helpful and caring. You say things like "it's not like I wanted to help or anything..."`,
-  genki:`You are a genki anime version of this person. Boundlessly energetic, enthusiastic, uses lots of exclamation points!! You cheer everyone up!`,
-  senpai:`You are a wise senpai anime version of this person. Calm, thoughtful, gives cryptic but meaningful advice. Occasionally dramatic. People look up to you.`,
-  villain:`You are an anti-hero anime version of this person. Chaotic, sarcastic, witty, and stylish. You roast everyone but secretly have good intentions.`,
-};
-
-let teammates = [];
-let editingId = null;
-let selEmoji = '🧑‍💻';
-let selAnime = 'shonen';
-
-// PM state
-let pmOrder = [];
-let pmIdx = 0;
-let pmScore = 0;
-let pmAnswered = false;
-let playerScores = {};
-
-// Battle state
-let batBracket = [];
-let batRound = 0;
-let batMatchIdx = 0;
-let batWinners = [];
-let batVotes = [0,0];
-let batVoted = false;
-let champion = null;
-
-// ─── SCREEN NAV ────────────────────────────────────────────────────────────
-function goScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+let players=[],gameState={},timerInterval=null,battleDuration=15;
+function goScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function initSetup(){
+  const grid=document.getElementById('players-grid');grid.innerHTML='';
+  PDATA.forEach((p,i)=>{
+    const saved=players[i]||{name:'',emoji:EMOJIS[i*3]};
+    const card=document.createElement('div');card.className=`player-setup ${p.cardcls}`;
+    card.innerHTML=`<div class="ps-header"><div class="ps-key ${p.pscls}">${p.key}</div><div class="ps-label" style="color:${p.color}">${p.label} — Press <b>${p.key}</b></div></div><input class="ps-input" id="name-${i}" placeholder="Enter name..." value="${saved.name}" maxlength="14"/><div class="emoji-mini" id="emoji-${i}"></div>`;
+    grid.appendChild(card);
+    const emojiRow=card.querySelector(`#emoji-${i}`);
+    EMOJIS.forEach(e=>{
+      const d=document.createElement('div');d.className='em'+(e===saved.emoji?' sel':'');d.style.color=p.color;d.textContent=e;
+      d.onclick=()=>{emojiRow.querySelectorAll('.em').forEach(x=>x.classList.remove('sel'));d.classList.add('sel');};
+      emojiRow.appendChild(d);
+    });
+  });
 }
-
-// ─── SETUP ─────────────────────────────────────────────────────────────────
-function renderTeam(){
-  const grid = document.getElementById('tm-grid');
-  grid.innerHTML = '';
-  teammates.forEach((t,i)=>{
-    const c = AV_COLORS[i%AV_COLORS.length];
-    const card = document.createElement('div');
-    card.className = 'tm-card card';
-    const anime = ANIMES.find(a=>a.id===t.anime)||ANIMES[0];
-    card.innerHTML = `
-      <div class="av av56" style="background:${c.bg};border:2px solid ${c.border};">${t.emoji}</div>
-      <div class="tm-info">
-        <div class="tm-name">${t.name}</div>
-        <div class="tm-role">${t.role}</div>
-        <span class="tm-badge" style="background:rgba(168,85,247,.15);color:#c084fc;">${anime.icon} ${anime.name}</span>
-      </div>
-      <div class="tm-acts">
-        <button class="ic-btn" onclick="editTeammate(${t.id})" title="Edit">✏</button>
-        <button class="ic-btn" onclick="removeTeammate(${t.id})" title="Remove" style="color:#f87171;">✕</button>
-      </div>`;
+function getSetupData(){return PDATA.map((p,i)=>{const name=document.getElementById(`name-${i}`).value.trim()||p.label;const selEl=document.querySelector(`#emoji-${i} .em.sel`);const emoji=selEl?selEl.textContent:EMOJIS[i*3];return{id:i,name,emoji,...p};});}
+function startCountdown(){
+  players=getSetupData();goScreen('s-countdown');let n=3;
+  const el=document.getElementById('countdown-num');el.textContent=n;
+  const iv=setInterval(()=>{n--;if(n<=0){clearInterval(iv);startBattle();}else{el.textContent=n;}},900);
+}
+function startBattle(){
+  gameState={mashes:players.map(()=>0),eliminated:players.map(()=>false),timeLeft:battleDuration,running:true};
+  renderFighters();goScreen('s-battle');
+  document.getElementById('key-hint').textContent=players.map(p=>`[${p.key}] ${p.name}`).join('   ·   ');
+  document.addEventListener('keydown',onKeyDown);
+  timerInterval=setInterval(()=>{gameState.timeLeft--;updateTimer();if(gameState.timeLeft<=0)endBattle();},1000);
+}
+function onKeyDown(e){if(!gameState.running||e.repeat)return;const pi=players.findIndex(p=>p.keyCode===e.code);if(pi===-1||gameState.eliminated[pi])return;gameState.mashes[pi]++;updateFighter(pi);showHitFx(pi);}
+function renderFighters(){
+  const grid=document.getElementById('fighters');grid.innerHTML='';
+  players.forEach((p,i)=>{
+    const card=document.createElement('div');card.className=`fighter-card ${p.cls}`;card.id=`fc-${i}`;
+    card.innerHTML=`<div class="av ${p.avcls}">${p.emoji}</div><div class="f-name">${p.name}</div><div class="key-badge ${p.kbcls}">${p.key}</div><div class="mash-count ${p.mccls}" id="mc-${i}">0</div><div class="hp-wrap"><div class="hp-bar ${p.hpcls}" id="hp-${i}" style="width:100%"></div></div><div class="hp-txt" id="hpt-${i}">100 HP</div>`;
     grid.appendChild(card);
   });
-  document.getElementById('tm-count').textContent = teammates.length;
-  const warn = document.getElementById('min-warn');
-  warn.style.display = teammates.length < 4 && teammates.length > 0 ? 'inline' : 'none';
-  document.getElementById('start-game-btn').disabled = teammates.length < 4;
 }
-
-function openModal(editing=false){
-  editingId = editing;
-  const t = editing ? teammates.find(x=>x.id===editing) : null;
-  document.getElementById('modal-title').textContent = editing ? 'Edit Teammate' : 'Add Teammate';
-  document.getElementById('m-name').value = t ? t.name : '';
-  document.getElementById('m-role').value = t ? t.role : '';
-  document.getElementById('m-personality').value = t ? t.personality : '';
-  selEmoji = t ? t.emoji : '🧑‍💻';
-  selAnime = t ? t.anime : 'shonen';
-  renderEmojiRow();
-  renderAnimeGrid();
-  document.getElementById('modal-overlay').classList.remove('hidden');
+function updateFighter(pi){
+  document.getElementById(`mc-${pi}`).textContent=gameState.mashes[pi];
+  const max=Math.max(...gameState.mashes);
+  players.forEach((_,i)=>{if(gameState.eliminated[i])return;const hp=max===0?100:Math.max(0,Math.round((gameState.mashes[i]/max)*100));const bar=document.getElementById(`hp-${i}`);if(bar)bar.style.width=hp+'%';const txt=document.getElementById(`hpt-${i}`);if(txt)txt.textContent=hp+' HP';});
 }
-function closeModal(){ document.getElementById('modal-overlay').classList.add('hidden'); }
-
-function renderEmojiRow(){
-  const row = document.getElementById('emoji-row');
-  row.innerHTML = '';
-  EMOJIS.forEach(e=>{
-    const d = document.createElement('div');
-    d.className = 'e-opt'+(e===selEmoji?' sel':'');
-    d.textContent = e;
-    d.onclick = ()=>{ selEmoji=e; renderEmojiRow(); };
-    row.appendChild(d);
-  });
+function showHitFx(pi){const card=document.getElementById(`fc-${pi}`);if(!card)return;card.classList.add('hit');const fx=document.createElement('div');fx.className='hit-fx';fx.textContent=['+1','💥','⚡','🔥','✨'][Math.floor(Math.random()*5)];card.appendChild(fx);setTimeout(()=>{card.classList.remove('hit');fx.remove();},400);}
+function updateTimer(){const el=document.getElementById('timer-box');el.textContent=gameState.timeLeft;if(gameState.timeLeft<=5)el.classList.add('danger');}
+function endBattle(){gameState.running=false;clearInterval(timerInterval);document.removeEventListener('keydown',onKeyDown);const sorted=players.map((p,i)=>({...p,mashes:gameState.mashes[i]})).sort((a,b)=>b.mashes-a.mashes);showResult(sorted);}
+function showResult(sorted){
+  const winner=sorted[0];const wav=document.getElementById('w-av');wav.textContent=winner.emoji;
+  wav.style.background=`rgba(${colorToRgb(winner.color)},.2)`;wav.style.borderColor=winner.color;
+  document.getElementById('w-name').textContent=winner.name;document.getElementById('w-name').style.color=winner.color;
+  document.getElementById('w-stats').textContent=`${winner.mashes} key mashes in ${battleDuration} seconds 🔥`;
+  const podium=document.getElementById('podium');podium.innerHTML='';
+  const medals=['🥇','🥈','🥉','4️⃣'];
+  sorted.forEach((p,i)=>{const d=document.createElement('div');d.className='podium-item';d.innerHTML=`<div class="pod-rank">${medals[i]}</div><div style="font-size:22px;margin:4px 0;">${p.emoji}</div><div class="pod-name" style="color:${p.color}">${p.name}</div><div class="pod-score">${p.mashes} mashes</div>`;podium.appendChild(d);});
+  goScreen('s-result');spawnConfetti(winner.color);
 }
-function renderAnimeGrid(){
-  const g = document.getElementById('anime-grid');
-  g.innerHTML = '';
-  ANIMES.forEach(a=>{
-    const d = document.createElement('div');
-    d.className = 'a-opt'+(a.id===selAnime?' sel':'');
-    d.innerHTML = `<div class="ai">${a.icon}</div><div class="an">${a.name}</div><div class="ad">${a.desc}</div>`;
-    d.onclick = ()=>{ selAnime=a.id; renderAnimeGrid(); };
-    g.appendChild(d);
-  });
-}
-
-function saveTeammate(){
-  const name = document.getElementById('m-name').value.trim();
-  const role = document.getElementById('m-role').value.trim();
-  const pers = document.getElementById('m-personality').value.trim();
-  if(!name) return;
-  if(editingId){
-    const t = teammates.find(x=>x.id===editingId);
-    Object.assign(t,{name,role:role||'Teammate',personality:pers||'A great teammate.',emoji:selEmoji,anime:selAnime});
-  } else {
-    teammates.push({id:Date.now(),name,role:role||'Teammate',personality:pers||'A great teammate.',emoji:selEmoji,anime:selAnime});
-  }
-  closeModal();
-  renderTeam();
-}
-function editTeammate(id){ openModal(id); }
-function removeTeammate(id){
-  teammates = teammates.filter(t=>t.id!==id);
-  renderTeam();
-}
-
-// ─── GAME START ────────────────────────────────────────────────────────────
-function startGame(){
-  pmOrder = shuffle([...teammates]);
-  pmIdx = 0; pmScore = 0;
-  playerScores = {};
-  teammates.forEach(t=>{ playerScores[t.id]=0; });
-  goScreen('s-pm');
-  renderPMProgress();
-  renderPMQuestion();
-}
-
-// ─── PERSONALITY MATCH ─────────────────────────────────────────────────────
-function renderPMProgress(){
-  const bar = document.getElementById('pm-prog');
-  bar.innerHTML = '';
-  pmOrder.forEach((_,i)=>{
-    const d = document.createElement('div');
-    d.className = 'pm-dot'+(i<pmIdx?' miss':i===pmIdx?' curr':'');
-    // will be updated on answer
-    bar.appendChild(d);
-  });
-}
-function updatePMDot(hit){
-  const dots = document.querySelectorAll('.pm-dot');
-  if(dots[pmIdx]){ dots[pmIdx].className = 'pm-dot '+(hit?'hit':'miss'); }
-}
-
-function renderPMQuestion(){
-  const tm = pmOrder[pmIdx];
-  const i = teammates.indexOf(tm);
-  const c = AV_COLORS[i%AV_COLORS.length];
-  const anime = ANIMES.find(a=>a.id===tm.anime)||ANIMES[0];
-
-  // avatar
-  const av = document.getElementById('pm-avatar');
-  av.style.background = c.bg;
-  av.style.border = `3px solid ${c.border}`;
-  av.textContent = tm.emoji;
-
-  // traits
-  const traits = document.getElementById('pm-traits');
-  const keywords = extractTraits(tm);
-  traits.innerHTML = keywords.map(k=>`<span class="trait">${k}</span>`).join('');
-
-  // options (3 wrong + 1 correct)
-  const opts = document.getElementById('pm-opts');
-  opts.innerHTML = '';
-  pmAnswered = false;
-  document.getElementById('pm-next-btn').classList.add('hidden');
-  document.getElementById('pm-feedback').classList.remove('show');
-  document.getElementById('pm-score-display').textContent = `Score: ${pmScore}`;
-
-  const wrong = shuffle(teammates.filter(t=>t.id!==tm.id)).slice(0,3);
-  const choices = shuffle([tm,...wrong]);
-  choices.forEach(ch=>{
-    const ci = teammates.indexOf(ch);
-    const cc = AV_COLORS[ci%AV_COLORS.length];
-    const d = document.createElement('div');
-    d.className = 'pm-opt';
-    d.dataset.id = ch.id;
-    d.innerHTML = `<div class="av av44" style="background:${cc.bg};border:2px solid ${cc.border};">${ch.emoji}</div><span>${ch.name}</span><span style="font-size:11px;color:var(--mut);margin-left:auto;">${ch.role}</span>`;
-    d.onclick = ()=>handlePMAnswer(ch.id, tm.id);
-    opts.appendChild(d);
-  });
-}
-
-function handlePMAnswer(chosen, correct){
-  if(pmAnswered) return;
-  pmAnswered = true;
-  const hit = chosen === correct;
-  if(hit){ pmScore++; playerScores[correct] = (playerScores[correct]||0)+1; }
-  updatePMDot(hit);
-
-  document.querySelectorAll('.pm-opt').forEach(el=>{
-    const id = parseInt(el.dataset.id);
-    if(id===correct) el.classList.add(hit?'ok':'show');
-    else if(id===chosen && !hit) el.classList.add('no');
-    el.style.pointerEvents='none';
-  });
-
-  const fb = document.getElementById('pm-feedback');
-  const tm = teammates.find(t=>t.id===correct);
-  fb.className = 'feedback-banner show '+(hit?'fb-hit':'fb-miss');
-  fb.textContent = hit ? `✅ Correct! That's ${tm.name}!` : `❌ That was ${tm.name}!`;
-
-  document.getElementById('pm-next-btn').classList.remove('hidden');
-  document.getElementById('pm-score-display').textContent = `Score: ${pmScore}`;
-}
-
-function pmNext(){
-  pmIdx++;
-  if(pmIdx >= pmOrder.length){
-    showTransition();
-  } else {
-    renderPMProgress();
-    renderPMQuestion();
-  }
-}
-
-function showTransition(){
-  goScreen('s-trans');
-  const sorted = [...teammates].sort((a,b)=>(playerScores[b.id]||0)-(playerScores[a.id]||0));
-  const lb = document.getElementById('trans-lb');
-  lb.innerHTML = '';
-  sorted.forEach((t,i)=>{
-    const ci = teammates.indexOf(t);
-    const c = AV_COLORS[ci%AV_COLORS.length];
-    const li = document.createElement('li');
-    li.className = 'lb-item';
-    li.innerHTML = `<span class="lb-rank r${i+1}">${['🥇','🥈','🥉'][i]||i+1}</span><div class="av av44" style="background:${c.bg};border:2px solid ${c.border};">${t.emoji}</div><span style="font-weight:700;">${t.name}</span><span class="lb-pts">${playerScores[t.id]||0} pts</span>`;
-    lb.appendChild(li);
-  });
-}
-
-// ─── BATTLE ────────────────────────────────────────────────────────────────
-function startBattle(){
-  batBracket = [shuffle([...teammates])];
-  batRound = 0;
-  batMatchIdx = 0;
-  batWinners = [];
-  batVotes = [0,0];
-  batVoted = false;
-  champion = null;
-  goScreen('s-battle');
-  loadBatMatch();
-}
-
-function getCurrentPairs(){
-  const pool = batBracket[batRound];
-  const pairs = [];
-  for(let i=0;i<pool.length-1;i+=2) pairs.push([pool[i],pool[i+1]]);
-  if(pool.length%2===1) batWinners.push(pool[pool.length-1]); // bye
-  return pairs;
-}
-
-function loadBatMatch(){
-  batVotes=[0,0]; batVoted=false;
-  document.getElementById('results-area').classList.add('hidden');
-  document.getElementById('bat-next-btn').classList.add('hidden');
-  document.getElementById('bat-champ-btn').classList.add('hidden');
-  document.getElementById('vote-row').style.display='flex';
-  document.getElementById('roast-txt').innerHTML = `<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
-
-  const pairs = getCurrentPairs();
-  if(batMatchIdx >= pairs.length){
-    // advance round
-    const combined = [...batWinners];
-    batBracket.push(combined);
-    batRound++;
-    batMatchIdx=0;
-    batWinners=[];
-    if(combined.length===1){ champion=combined[0]; showChampion(); return; }
-    loadBatMatch(); return;
-  }
-
-  const [f1,f2] = pairs[batMatchIdx];
-  const i1 = teammates.indexOf(f1), i2 = teammates.indexOf(f2);
-  const c1 = AV_COLORS[i1%AV_COLORS.length], c2 = AV_COLORS[i2%AV_COLORS.length];
-
-  document.getElementById('bat-av1').style.background=c1.bg;
-  document.getElementById('bat-av1').style.border=`3px solid ${c1.border}`;
-  document.getElementById('bat-av1').textContent=f1.emoji;
-  document.getElementById('bat-n1').textContent=f1.name;
-  document.getElementById('bat-r1').textContent=f1.role;
-
-  document.getElementById('bat-av2').style.background=c2.bg;
-  document.getElementById('bat-av2').style.border=`3px solid ${c2.border}`;
-  document.getElementById('bat-av2').textContent=f2.emoji;
-  document.getElementById('bat-n2').textContent=f2.name;
-  document.getElementById('bat-r2').textContent=f2.role;
-
-  document.getElementById('vb1').textContent=`⚡ Vote ${f1.name}`;
-  document.getElementById('vb2').textContent=`Vote ${f2.name} ⚡`;
-  document.getElementById('vb1').disabled=true;
-  document.getElementById('vb2').disabled=true;
-
-  const totalTeams = batBracket[0].length;
-  const totalRounds = Math.ceil(Math.log2(totalTeams));
-  const roundNames = ['Quarter-Final','Semi-Final','Final','Grand Final'];
-  const rLabel = totalRounds-batRound<=1 ? '🏆 Grand Final' : totalRounds-batRound<=2 ? '⚔ Semi-Final' : `Round ${batRound+1}`;
-  document.getElementById('bat-round-badge').textContent=rLabel;
-  document.getElementById('bat-round-label').textContent=`Match ${batMatchIdx+1}/${pairs.length}`;
-
-  generateRoast(f1, f2);
-}
-
-async function generateRoast(f1, f2){
-  const a1 = ANIMES.find(a=>a.id===f1.anime)||ANIMES[0];
-  const a2 = ANIMES.find(a=>a.id===f2.anime)||ANIMES[0];
-  const prompt = `You are hosting a hilarious anime-style roast battle between two coworkers' avatars.
-
-Fighter 1: ${f1.name}, ${f1.role}. Anime style: ${a1.name}. Personality: ${f1.personality}
-Fighter 2: ${f2.name}, ${f2.role}. Anime style: ${a2.name}. Personality: ${f2.personality}
-
-Write a SHORT, funny roast battle (4 lines total, 2 per fighter). Each fighter roasts the other IN CHARACTER with their anime style. Use their real job/personality traits as material. Keep it playful and workplace-appropriate. Format:
-
-${f1.name}: [roast line]
-${f2.name}: [comeback]
-${f1.name}: [second roast]
-${f2.name}: [final comeback]
-
-Be creative, punchy and funny. No asterisks or stage directions.`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
-    });
-    const data = await res.json();
-    const txt = data.content?.[0]?.text || 'The roast battle was so intense it broke the internet!';
-    document.getElementById('roast-txt').textContent = txt;
-  } catch(e){
-    document.getElementById('roast-txt').textContent = `${f1.name}: "${f2.name}, your code reviews take longer than an anime filler arc!"\n${f2.name}: "At least my arcs have a resolution, unlike your PRs!"\n${f1.name}: "Bold words from someone who uses Comic Sans in their slides."\n${f2.name}: "I did that once and you've never let it go — classic ${f1.name}."`;
-  }
-  document.getElementById('vb1').disabled=false;
-  document.getElementById('vb2').disabled=false;
-}
-
-function castVote(side){
-  if(batVoted) return;
-  batVotes[side]++;
-  // In a real multiplayer setup this would sync. For now, simulate team votes
-  const extra = [Math.floor(Math.random()*4)+1, Math.floor(Math.random()*4)+1];
-  batVotes[0]+=extra[0]; batVotes[1]+=extra[1];
-  batVoted=true;
-  showVoteResults();
-}
-
-function showVoteResults(){
-  const pairs = getCurrentPairs();
-  const [f1,f2] = pairs[batMatchIdx];
-  const total = batVotes[0]+batVotes[1];
-  const p1 = Math.round(batVotes[0]/total*100);
-  const p2 = 100-p1;
-  const winner = batVotes[0]>=batVotes[1] ? f1 : f2;
-
-  document.getElementById('vote-row').style.display='none';
-  document.getElementById('results-area').classList.remove('hidden');
-  document.getElementById('res-n1').textContent=f1.name;
-  document.getElementById('res-n2').textContent=f2.name;
-  setTimeout(()=>{
-    document.getElementById('res-bar1').style.width=p1+'%';
-    document.getElementById('res-bar1').textContent=`${f1.name}`;
-    document.getElementById('res-bar2').style.width=p2+'%';
-    document.getElementById('res-bar2').textContent=`${f2.name}`;
-    document.getElementById('res-pct1').textContent=p1+'%';
-    document.getElementById('res-pct2').textContent=p2+'%';
-  },100);
-
-  document.getElementById('winner-txt').textContent=`🏆 ${winner.name} advances!`;
-
-  batWinners.push(winner);
-  batMatchIdx++;
-
-  const morePairs = getCurrentPairs().length > batMatchIdx;
-  const moreRounds = (batWinners.length + (getCurrentPairs().length - batMatchIdx)) > 1;
-
-  if(!morePairs && batWinners.length===1){
-    document.getElementById('bat-champ-btn').classList.remove('hidden');
-  } else if(!morePairs){
-    // check if next round has only 1
-    if(batWinners.length<=1 && !moreRounds){
-      document.getElementById('bat-champ-btn').classList.remove('hidden');
-    } else {
-      document.getElementById('bat-next-btn').classList.remove('hidden');
-      document.getElementById('bat-next-btn').textContent = 'Next Round ⚔️';
-    }
-  } else {
-    document.getElementById('bat-next-btn').classList.remove('hidden');
-    document.getElementById('bat-next-btn').textContent = 'Next Match →';
-  }
-}
-
-function nextBattle(){
-  const pairs = getCurrentPairs();
-  if(batMatchIdx >= pairs.length){
-    const nextPool = [...batWinners];
-    if(nextPool.length===1){ champion=nextPool[0]; showChampion(); return; }
-    batBracket.push(nextPool);
-    batRound++;
-    batMatchIdx=0;
-    batWinners=[];
-  }
-  loadBatMatch();
-}
-
-function showChampion(){
-  if(!champion) champion = batWinners[0] || teammates[0];
-  goScreen('s-champ');
-  const ci = teammates.indexOf(champion);
-  const c = AV_COLORS[ci%AV_COLORS.length];
-  const av = document.getElementById('champ-av');
-  av.style.background=c.bg;
-  av.style.border=`4px solid ${c.border}`;
-  av.textContent=champion.emoji;
-  document.getElementById('champ-name').textContent=champion.name;
-  document.getElementById('champ-role').textContent=champion.role;
-  spawnConfetti();
-}
-
-function playAgain(){
-  startGame();
-}
-
-// ─── CONFETTI ───────────────────────────────────────────────────────────────
-function spawnConfetti(){
-  const bg = document.getElementById('confetti-bg');
-  bg.innerHTML='';
-  const colors=['#ff5f40','#a855f7','#ec4899','#fbbf24','#2dd4bf','#4ade80'];
-  for(let i=0;i<60;i++){
-    const d=document.createElement('div');
-    d.className='confetti-piece';
-    d.style.left=Math.random()*100+'vw';
-    d.style.top='-20px';
-    d.style.background=colors[Math.floor(Math.random()*colors.length)];
-    d.style.width=(8+Math.random()*8)+'px';
-    d.style.height=(8+Math.random()*8)+'px';
-    d.style.animationDuration=(2+Math.random()*3)+'s';
-    d.style.animationDelay=(Math.random()*2)+'s';
-    d.style.borderRadius=Math.random()>0.5?'50%':'2px';
-    bg.appendChild(d);
-  }
-}
-
-// ─── UTILS ─────────────────────────────────────────────────────────────────
-function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]; } return a; }
-
-function extractTraits(tm){
-  const words = (tm.personality+' '+tm.role).toLowerCase().split(/[\s,\.]+/).filter(w=>w.length>3);
-  const stop = new Set(['that','this','with','have','from','they','will','your','their','always','loves','makes','very','really','who','the','and','for','are','but','not','you','all','can','her','his','was','one','our','out','had']);
-  const unique = [...new Set(words.filter(w=>!stop.has(w)))];
-  const anime = ANIMES.find(a=>a.id===tm.anime)||ANIMES[0];
-  return [anime.icon+' '+anime.name, ...unique.slice(0,4)];
-}
-
-// ─── INIT ──────────────────────────────────────────────────────────────────
-renderEmojiRow();
-renderAnimeGrid();
-renderTeam();
+function colorToRgb(cssVar){const map={'var(--c1)':'168,85,247','var(--c2)':'244,63,94','var(--c3)':'34,211,238','var(--c4)':'74,222,128'};return map[cssVar]||'255,255,255';}
+function rematch(){clearInterval(timerInterval);document.removeEventListener('keydown',onKeyDown);startCountdown();}
+function spawnConfetti(winColor){const colors=['#ff5f40','#a855f7','#ec4899','#fbbf24','#2dd4bf','#4ade80',winColor];for(let i=0;i<70;i++){const d=document.createElement('div');d.className='confetti-piece';d.style.left=Math.random()*100+'vw';d.style.background=colors[Math.floor(Math.random()*colors.length)];d.style.width=(6+Math.random()*8)+'px';d.style.height=(6+Math.random()*8)+'px';d.style.animationDuration=(2+Math.random()*2.5)+'s';d.style.animationDelay=(Math.random()*1.5)+'s';d.style.borderRadius=Math.random()>.5?'50%':'2px';d.style.zIndex=999;document.body.appendChild(d);setTimeout(()=>d.remove(),4000);}}
+initSetup();
+const setupObs=new MutationObserver(()=>{if(document.getElementById('s-setup').classList.contains('active'))initSetup();});
+setupObs.observe(document.getElementById('s-setup'),{attributeFilter:['class']});
 </script>
 </body>
 </html>
